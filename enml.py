@@ -9,8 +9,9 @@ class HTMLCreatorTarget:
   elements = None
   resources = None
   
-  def __init__(self, resources={}):
+  def __init__(self, resources={}, resources_keys_are_binary_hashes=False):
     self.resources = resources
+    self.resources_keys_are_binary_hashes = resources_keys_are_binary_hashes
   
   def start(self, tag, attrib):   # Called for each opening tag.
   
@@ -40,8 +41,9 @@ class HTMLCreatorTarget:
       if not type.startswith("image") :
         return
       elem = SubElement(self.elements[-1], 'img')
-      hash = BodyHashOfENMLHash(hash)
       
+      if self.resources_keys_are_binary_hashes:
+        hash = BodyHashOfENMLHash(hash)
       resource = self.resources[hash]
       
       if resource != None:
